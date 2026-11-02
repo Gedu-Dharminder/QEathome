@@ -1,0 +1,101 @@
+@model GuidePageViewModel
+@{
+    var siteName = "Queen Elizabeth’s School, Dubai Sports City";
+    var title = Model.Current.Slug == "welcome"
+        ? $"QE@Home | {siteName}"
+        : $"{Model.Current.PageTitle} | QE@Home | {siteName}";
+}
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@title</title>
+  <meta name="description" content="How learning, wellbeing and communication will work at Queen Elizabeth’s School, Dubai Sports City, if the school moves to distance learning.">
+  <link rel="stylesheet" href="~/qe-at-home/css/qe-at-home.css" asp-append-version="true">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="site">
+  <div class="hbar">
+    <div class="hleft">
+      <a class="qeh" href="/qe-at-home" aria-label="QE at Home, guide home">QE<span>@@</span>Home</a>
+      <div class="hcontact">
+        <a href="mailto:reception@@qedubaisportscity.com">reception@@qedubaisportscity.com</a> &nbsp;|&nbsp;
+        <a href="tel:+97144969858">+971 (0) 44 969858</a>
+      </div>
+    </div>
+    <a class="brand" href="/qe-at-home" aria-label="Distance Learning Guide home"><img src="/qe-at-home/img/logo.png" alt="Queen Elizabeth’s School, Dubai Sports City"></a>
+    <div class="hright">
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="overlay"><span class="lbl">Menu</span><span class="bars" aria-hidden="true"></span></button>
+    </div>
+  </div>
+  <nav class="subnav" aria-label="Guide sections"><ul id="subnav">
+      @foreach (var s in Model.Sections)
+      {
+        <li><a href="@GuideNavigation.UrlFor(s)" aria-current="@(s == Model.Current ? "page" : null)">@s.NavTitle</a></li>
+      }
+    </ul></nav>
+</header>
+
+<div class="overlay" id="overlay" role="dialog" aria-label="Guide menu">
+  <div class="top"><img src="/qe-at-home/img/logo.png" alt="" style="height:60px;width:auto"><button class="close" id="closeBtn">Close</button></div>
+  <ol id="menuList">
+    @foreach (var s in Model.Sections)
+    {
+      <li><a href="@GuideNavigation.UrlFor(s)">@s.NavTitle</a></li>
+    }
+  </ol>
+</div>
+
+<main id="main">
+  @RenderBody()
+
+  <div class="wrap">
+    <nav class="pager" aria-label="Previous and next section">
+      @if (Model.Previous is not null)
+      {
+        <a class="btn ghost" href="@GuideNavigation.UrlFor(Model.Previous)">&larr; @Model.Previous.NavTitle</a>
+      }
+      else
+      {
+        <span></span>
+      }
+      @if (Model.Next is not null)
+      {
+        <a class="btn" href="@GuideNavigation.UrlFor(Model.Next)">@Model.Next.NavTitle &rarr;</a>
+      }
+    </nav>
+    <div style="height:56px"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <img src="/qe-at-home/img/logo.png" alt="Queen Elizabeth’s School, Dubai Sports City" style="height:76px;width:auto;margin-bottom:18px">
+        <p>Al Hebiah Fourth, Dubai Sports City, Dubai</p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p><a href="tel:+97144969858">+971 (0) 44 969858</a><br><a href="mailto:reception@@qedubaisportscity.com">reception@@qedubaisportscity.com</a></p>
+      </div>
+      <div>
+        <h4>This guide</h4>
+        <p>
+          @foreach (var s in Model.Sections)
+          {
+            <a href="@GuideNavigation.UrlFor(s)">@s.NavTitle</a><br>
+          }
+        </p>
+      </div>
+    </div>
+    <div class="legal">Distance Learning Guide, Academic Year 2026 to 2027. All times are UAE time.</div>
+  </div>
+</footer>
+
+<script src="~/qe-at-home/js/qe-at-home.js" asp-append-version="true"></script>
+</body>
+</html>
